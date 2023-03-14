@@ -1,0 +1,15 @@
+function []=BeamGraph(R,n)
+step=R/1000;
+X = step-R:step:R-step;
+Y = step-R:step:R-step;
+[x,y] = meshgrid(X,Y);
+for i=1:2*(R-step)
+    for j=1:2*(R-step)
+        
+    end
+end
+Z=0;
+for i=1:n
+    Z = Z + DoseCoefficient(x,y,2*pi*(i-1)/n,0);
+end
+contourf(x,y,real(Z));
