@@ -33,13 +33,21 @@ ad = (0.1299 - 0.0306*log(d));
 psi = (o.*lgc)./(s+d);
 O = OffAxisFactor(psi);
 
+%Calculate dosage when d >= 1.5
 dose1 = (P0*exp(-u*(d-1.5)).*(1 - exp(-gam*r)) + ((r*d.*ad)./(r+1.5))).*O.*ISF;
 dose1 = dose1.*(d >= 1.5);
-    
+
+%Calculate dosage when d < 1.5.
 dose2 = (0.4.*(d./1.5) + 0.6).*(P0*(1-exp(-gam*r)) + ((1.5*r.*ad)./(r+1.5))).*O.*ISF;
 dose2 = dose2.*(d < 1.5);
 
+%Combine to get full dosage matrix
 dose = dose1 + dose2;
+
+%Put 0's in for values that are outside of circle anatomy.
+distances = sqrt(x.^2+y.^2);
+circle = (distances < Rc);
+dose = dose.*circle;
 
 end
 
