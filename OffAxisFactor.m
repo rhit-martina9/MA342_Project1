@@ -1,32 +1,18 @@
-function [mult] = OffAxisFactor(psi)
+function [O] = OffAxisFactor(psi)
 
 M = readmatrix('OffAxisData.txt');
 
-len = length(M);
-index = 2;
+num_cols = length(psi);
 
-if(psi < .044270)
-    mult = 1;
-    return;
-end
+psi = reshape(psi,[],1); %Reshape with 1 column to act as array
 
-if(psi > M(340,1))
-   mult = M(340,2);
-   return;
-end
+%Interpolate with sample x being first column of data, sample y is second 
+%column, and the points we want to interpolate are in the psi array. This
+%uses MATLABS linear spline interpolation.
+O = interp1(M(:,1),M(:,2),psi); 
 
-%Find indexes psi lies between. Lower is index - 1, upper is index.
-while(~(psi < M(index) && psi > M(index-1)) && index < len)
-    index = index + 1;
-end
-
-%Linear interpolation
-x1 = M(index-1,1);
-x2 = M(index,1);
-y1 = M(index-1,2);
-y2 = M(index,2);
-
-mult = ((y2-y1)/(x2-x1))*(psi-x1) + y1;
+%Reshape back into original matrix shape.
+O = reshape(O,[],num_cols);
 
 end
 

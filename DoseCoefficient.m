@@ -31,7 +31,7 @@ d = -s + sqrt(lgp.^2.-o.^2);
 ad = (0.1299 - 0.0306*log(d));
 
 psi = (o.*lgc)./(s+d);
-O = arrayfun(@(x)OffAxisFactor(x),psi);
+O = OffAxisFactor(psi);
 
 dose1 = (P0*exp(-u*(d-1.5)).*(1 - exp(-gam*r)) + ((r*d.*ad)./(r+1.5))).*O.*ISF;
 dose1 = dose1.*(d >= 1.5);
