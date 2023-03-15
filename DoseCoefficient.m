@@ -1,4 +1,4 @@
-function [dose] = DoseCoefficient(x,y,a,i)
+function [dose] = DoseCoefficient(x,y,a,i,Rc)
 
 %Given values for 6MV machine, 3mm square pencil
 P0 = 0.873;
@@ -7,7 +7,7 @@ r = .16830; %Pencil radius
 gam = 5.2586;
 
 %Adjusted values
-Rc = 5; %Circle radius.
+%Rc = 5; %Circle radius.
 lgc = 100; %Length of gantry to center
 
 %Calculated values
@@ -45,8 +45,8 @@ dose2 = dose2.*(d < 1.5);
 dose = dose1 + dose2;
 
 %Put 0's in for values that are outside of circle anatomy.
-distances = sqrt(x.^2+y.^2);
-circle = (distances < Rc);
+distances = x.^2+y.^2;
+circle = (distances <= Rc^2);
 dose = dose.*circle;
 
 end
