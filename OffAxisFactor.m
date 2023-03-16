@@ -2,7 +2,7 @@ function [O] = OffAxisFactor(psi)
 
 M = readmatrix('OffAxisData.txt');
 
-num_cols = length(psi);
+num_cols = length(psi(1,:));
 
 psi = reshape(psi,[],1); %Reshape with 1 column to act as array
 
