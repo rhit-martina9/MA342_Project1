@@ -1,6 +1,4 @@
-function [O] = OffAxisFactor(psi)
-
-M = readmatrix('OffAxisData.txt');
+function [O] = OffAxisFactor(psi,M)
 
 num_cols = length(psi(1,:));
 

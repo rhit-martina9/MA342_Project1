@@ -1,4 +1,4 @@
-function [dose] = DoseCoefficient(x,y,a,i,Rc)
+function [dose] = DoseCoefficient(x,y,a,i,Rc,M)
 
 %Given values for 6MV machine, 3mm square pencil
 P0 = 0.873;
@@ -21,8 +21,9 @@ theta = 2*i*f; %Angle from center pencile line to center line
 
 ISF = (lgc./lgp).^2;
 
+options = optimset('Display','off');
 fs = @(s) lgc^2 + s^2 -2*lgc*s*cos(theta) - Rc^2;
-s = fsolve(fs,0);
+s = fsolve(fs,0,options);
 
 a2 = a + theta; %Angle between pencil center line and horizontal line
 o = abs(-(x-gx)*sin(a2) + (y-gy)*cos(a2));
@@ -31,7 +32,7 @@ d = -s + sqrt(lgp.^2.-o.^2);
 ad = (0.1299 - 0.0306*log(d));
 
 psi = (o.*lgc)./(s+d);
-O = OffAxisFactor(psi);
+O = OffAxisFactor(psi,M);
 
 %Calculate dosage when d >= 1.5
 dose1 = (P0*exp(-u*(d-1.5)).*(1 - exp(-gam*r)) + ((r*d.*ad)./(r+1.5))).*O.*ISF;
